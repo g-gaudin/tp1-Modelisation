@@ -19,15 +19,13 @@ def getFile(fileName):
 
 def testFile(fileName):
     box_size, object_list, numobj = getFile(fileName)
-    print(h.best_fit(box_size,object_list))
-    cps.solveWithCplex(box_size,object_list,numobj)
-    return [h.first_fit(box_size, object_list), h.next_fit(box_size, object_list), h.best_fit(box_size, object_list)]
+    return [h.first_fit(box_size, object_list), h.next_fit(box_size, object_list), h.best_fit(box_size, object_list),cps.solveWithCplex(box_size,object_list,numobj)]
 
 
 def plotDataSetResults(directory, capacities, volume):
     X = np.arange(4)
     ax = plt.subplot()
-    data = np.zeros([3, 4])
+    data = np.zeros([4, 4])
     i = 0
     j = 0
     files = glob.glob(directory + '/*')
@@ -36,23 +34,27 @@ def plotDataSetResults(directory, capacities, volume):
         data[0][j] += result[0]
         data[1][j] += result[1]
         data[2][j] += result[2]
+        data[3][j] += result[3]
         i += 1
         if (i == 20):
             i = 0
             data[0][j] /= 20.0
             data[1][j] /= 20.0
             data[2][j] /= 20.0
+            data[3][j] /= 20.0
             j += 1
     data[0] = np.sort(data[0])
     data[1] = np.sort(data[1])
     data[2] = np.sort(data[2])
-    ax.bar(X - 0.20, data[0], color='b', width=0.2, align='center')
-    ax.bar(X + 0.0, data[1], color='g', width=0.2, align='center')
-    ax.bar(X + 0.20, data[2], color='r', width=0.2, align='center')
+    data[3] = np.sort(data[3])
+    ax.bar(X - 0.40, data[0], color='b', width=0.2, align='center')
+    ax.bar(X - 0.20, data[1], color='g', width=0.2, align='center')
+    ax.bar(X + 0.00, data[2], color='r', width=0.2, align='center')
+    ax.bar(X+ 0.20, data[3], color='y',width=0.2, align='center')
     ax.set_title('Set : ' + directory + ' : volume V = ' + volume)
     ax.set_xlabel('Nombre d\'objets à ranger')
     ax.set_ylabel('Nombre moyen de boites')
-    ax.legend(labels=["first fit", "next fit", "best fit"])
+    ax.legend(labels=["first fit", "next fit", "best fit","cplex"])
     ax.set_xticks(X)
     ax.set_xticklabels(capacities)
     plt.show()

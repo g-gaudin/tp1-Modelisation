@@ -2,6 +2,8 @@ from doopl.factory import *
 
 def solveWithCplex(box_size,object_list,numobj):
     # Generation des donnees :
+    if(numobj>501):
+        return numobj
     pb = [(numobj,box_size)]
     listobjects = [(1,object_list[0])]
     for i in range (numobj-1):
@@ -17,4 +19,4 @@ def solveWithCplex(box_size,object_list,numobj):
         opl.mute()
         opl.run()
         results = opl.get_table('results')
-        print(results)
+        return results.iloc[0]['nbUsedBins']
