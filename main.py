@@ -30,6 +30,7 @@ def plotDataSetResults(directory, capacities, volume):
     j = 0
     files = glob.glob(directory + '/*')
     for file in files:
+        print(file)
         result = testFile(file)
         data[0][j] += result[0]
         data[1][j] += result[1]
